@@ -65,8 +65,15 @@ public class LiterAluraApplication implements CommandLineRunner {
 					if (dadosWrapper != null && dadosWrapper.results() != null) {
 						for (DadosLivros livro : dadosWrapper.results()) {
 							System.out.println("Título: " + livro.title());
+
 							System.out.println("Autores: " + livro.authors().stream().map(DadosLivros.Autor::name).toList());
+
+							System.out.println("Periodo: " + " De " +
+									livro.authors().stream().map(DadosLivros.Autor::birthYear).toList() + " a "
+									+ livro.authors().stream().map(DadosLivros.Autor::deathYear).toList());
+
 							System.out.println("Idiomas: " + livro.languages());
+
 							System.out.println("Downloads: " + livro.downloads());
 							System.out.println("---------");
 						}
