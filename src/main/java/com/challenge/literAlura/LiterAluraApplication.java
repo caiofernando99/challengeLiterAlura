@@ -106,8 +106,10 @@ public class LiterAluraApplication implements CommandLineRunner {
 					System.out.println("Opção inválida. Tente novamente.");
 			}
 		} while (readOption != 0);
-
-		// Fechar o scanner ao sair do loop
 		scanner.close();
+
+
+
+
 	}}
 
