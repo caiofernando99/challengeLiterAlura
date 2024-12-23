@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Scanner;
+
 
 @SpringBootApplication
 public class LiterAluraApplication implements CommandLineRunner {
@@ -53,7 +55,7 @@ public class LiterAluraApplication implements CommandLineRunner {
 
 			switch (readOption) {
 				case 1:
-					System.out.println("Opção 1 selecionada: Buscar livro");
+					System.out.println("Opção 1 selecionada: Buscar livro\n");
 					System.out.print("Digite o nome do livro: ");
 
 					// Pegar dado do título
@@ -67,47 +69,41 @@ public class LiterAluraApplication implements CommandLineRunner {
 					DadosLivrosWrapper dadosWrapper = converteDados.obterDados(json, DadosLivrosWrapper.class);
 
 					if (dadosWrapper != null && dadosWrapper.results() != null) {
-						for (DadosLivros livro : dadosWrapper.results()) {
-							System.out.println("Título: " + livro.title());
+						for (DadosLivros livroAPI : dadosWrapper.results()) {
+							String authorName = livroAPI.authors().stream().findFirst().get().name();
+							Autor author = autorRepository.findByNome(authorName);
 
-							System.out.println("Autores: " + livro.authors().stream().map(DadosLivros.Autor::name).toList());
+							if (author == null) {
+								author = new Autor();
+								author.setNome(authorName);
 
-							System.out.println("Periodo: " + " De " +
-									livro.authors().stream().map(DadosLivros.Autor::birthYear).toList() + " a "
-									+ livro.authors().stream().map(DadosLivros.Autor::deathYear).toList());
+								Integer birthYear = livroAPI.authors().stream().findFirst().map(DadosLivros.Autor::birthYear).orElse(null);
+								Integer deathYear = livroAPI.authors().stream().findFirst().map(DadosLivros.Autor::deathYear).orElse(null);
 
-							System.out.println("Idiomas: " + livro.languages());
+								if (birthYear != null) {
+									author.setDataNascimento(birthYear);
+								}
+								if (deathYear != null) {
+									author.setDataMorte(deathYear);
+								}
 
-							System.out.println("Downloads: " + livro.downloads());
-							System.out.println("---------");
+								autorRepository.save(author);
+								System.out.println("Autor Salvo: " + author); // Log para verificar o autor salvo
+							} else {
+								System.out.println("Autor Encontrado: " + author); // Log para verificar o autor encontrado
+							}
 
 							Livro livroSalvar = new Livro();
+							livroSalvar.setTitle(livroAPI.title());
+							livroSalvar.setDownloadCount(livroAPI.downloads());
+							livroSalvar.setLanguage(String.valueOf(livroAPI.language()));
 
-							livroSalvar.setTitle(livro.title());
-//							String autorName = livro.authors().stream().map(DadosLivros.Autor::name).toList().get(0);
-//							livroSalvar.setAuthorName(autorName);
-							livroSalvar.setDownloadCount(livro.downloads());
-							livroSalvar.setLanguage(String.valueOf(livro.languages()));
+							livroSalvar.setAuthor(author); // ASSOCIA o autor ao livro
 
-							Autor nameAuthor = autorRepository.findByNome(livro.authors().stream().findFirst().get().name());
-							livroSalvar.setAuthor(nameAuthor);
-
-							livroRepository.save(livroSalvar);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+							livroRepository.save(livroSalvar); // Salva o LIVRO DEPOIS
+							System.out.println("Livro Salvo: " + livroSalvar); // Log para verificar o livro salvo
 						}
+
 					} else {
 						System.out.println("Nenhum resultado encontrado.");
 					}

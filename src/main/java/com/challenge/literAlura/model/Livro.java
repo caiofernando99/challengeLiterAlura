@@ -2,8 +2,6 @@ package com.challenge.literAlura.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "Livros")
 public class Livro {
@@ -15,9 +13,8 @@ public class Livro {
     private String title;
 
     @ManyToOne
+    @JoinColumn(name = "author_id")
     private Autor author;
-
-    private String authorName;
 
     private int downloadCount;
 
@@ -63,13 +60,6 @@ public class Livro {
         this.downloadCount = downloadCount;
     }
 
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
 
     @Override
     public String toString() {

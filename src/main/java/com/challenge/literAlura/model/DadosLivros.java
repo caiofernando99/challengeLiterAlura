@@ -11,7 +11,7 @@ public record DadosLivros(@JsonAlias("title") String title,
                           @JsonAlias("autohrs") List<Autor> authors,
 //                          @JsonAlias("birth_year") int anoNasc,
 //                          @JsonAlias("death_year") int anoFalec,
-                          @JsonAlias("languages") List<String> languages,
+                          @JsonAlias("languages") List<String> language,
                           @JsonAlias("download_count") int downloads) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)

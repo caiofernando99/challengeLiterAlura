@@ -14,7 +14,7 @@ public class Autor {
 
     private String nome;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Livro> livros = new ArrayList<>();
 
     private int dataNascimento;
