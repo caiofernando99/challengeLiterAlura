@@ -1,6 +1,5 @@
-package com.challenge.literAlura.service;
+package com.challenge.literAlura.model;
 
-import com.challenge.literAlura.model.DadosLivros;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

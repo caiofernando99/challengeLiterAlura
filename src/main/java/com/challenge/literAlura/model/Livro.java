@@ -2,6 +2,8 @@ package com.challenge.literAlura.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Livros")
 public class Livro {
@@ -15,10 +17,19 @@ public class Livro {
     @ManyToOne
     private Autor author;
 
+    private String authorName;
+
     private int downloadCount;
 
+    private String language;
 
+    public String getLanguage() {
+        return language;
+    }
 
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public Long getId() {
         return id;
@@ -50,6 +61,14 @@ public class Livro {
 
     public void setDownloadCount(int downloadCount) {
         this.downloadCount = downloadCount;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     @Override

@@ -50,4 +50,20 @@ public class Autor {
     public void setLivros(List<Livro> livros) {
         this.livros = livros;
     }
+
+    public int getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(int dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public int getDataMorte() {
+        return dataMorte;
+    }
+
+    public void setDataMorte(int dataMorte) {
+        this.dataMorte = dataMorte;
+    }
 }

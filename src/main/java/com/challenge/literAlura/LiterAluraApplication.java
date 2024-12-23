@@ -1,22 +1,28 @@
 package com.challenge.literAlura;
 
+import com.challenge.literAlura.model.Autor;
 import com.challenge.literAlura.model.DadosLivros;
+import com.challenge.literAlura.model.Livro;
+import com.challenge.literAlura.repository.AutorRepository;
+import com.challenge.literAlura.repository.LivroRepository;
 import com.challenge.literAlura.service.ConsumoApi;
 import com.challenge.literAlura.service.ConverteDados;
-import com.challenge.literAlura.service.DadosLivrosWrapper;
+import com.challenge.literAlura.model.DadosLivrosWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.json.JsonParser;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Scanner;
 
 @SpringBootApplication
 public class LiterAluraApplication implements CommandLineRunner {
+
+	@Autowired
+	private LivroRepository livroRepository;
+
+	@Autowired
+	private AutorRepository autorRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LiterAluraApplication.class, args);
@@ -24,7 +30,7 @@ public class LiterAluraApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String... args) throws Exception {
-		// Instanciar o scanner apenas uma vez para evitar problemas
+
 		Scanner scanner = new Scanner(System.in);
 		int readOption;
 
@@ -40,8 +46,6 @@ public class LiterAluraApplication implements CommandLineRunner {
 							"5- Lista de livros registrados por idioma(no banco de dados)\n" +
 							"0- SAIR\n" +
 							"=========================================\n");
-
-			// Ler opção do usuário
 			System.out.print("Digite a opção desejada: ");
 			readOption = Integer.parseInt(scanner.nextLine());
 
@@ -76,10 +80,38 @@ public class LiterAluraApplication implements CommandLineRunner {
 
 							System.out.println("Downloads: " + livro.downloads());
 							System.out.println("---------");
+
+							Livro livroSalvar = new Livro();
+
+							livroSalvar.setTitle(livro.title());
+//							String autorName = livro.authors().stream().map(DadosLivros.Autor::name).toList().get(0);
+//							livroSalvar.setAuthorName(autorName);
+							livroSalvar.setDownloadCount(livro.downloads());
+							livroSalvar.setLanguage(String.valueOf(livro.languages()));
+
+							Autor nameAuthor = autorRepository.findByNome(livro.authors().stream().findFirst().get().name());
+							livroSalvar.setAuthor(nameAuthor);
+
+							livroRepository.save(livroSalvar);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 						}
 					} else {
 						System.out.println("Nenhum resultado encontrado.");
 					}
+
 					break;
 
 				case 2:
