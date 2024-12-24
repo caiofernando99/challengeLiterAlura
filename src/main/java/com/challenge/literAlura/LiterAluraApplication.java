@@ -14,9 +14,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Scanner;
 
-
+@Transactional
 @SpringBootApplication
 public class LiterAluraApplication implements CommandLineRunner {
 
@@ -52,6 +53,7 @@ public class LiterAluraApplication implements CommandLineRunner {
 			readOption = Integer.parseInt(scanner.nextLine());
 
 			ConsumoApi consumoApi = new ConsumoApi();
+			ConverteDados converteDados = new ConverteDados();
 
 			switch (readOption) {
 				case 1:
@@ -65,7 +67,7 @@ public class LiterAluraApplication implements CommandLineRunner {
 
 					String json = consumoApi.obterDados("https://gutendex.com/books/?search=" + encodedTitle);
 
-					ConverteDados converteDados = new ConverteDados();
+
 					DadosLivrosWrapper dadosWrapper = converteDados.obterDados(json, DadosLivrosWrapper.class);
 
 					if (dadosWrapper != null && dadosWrapper.results() != null) {
@@ -111,11 +113,25 @@ public class LiterAluraApplication implements CommandLineRunner {
 					break;
 
 				case 2:
-					System.out.println("Opção 2 selecionada: Lista de livros registrados");
+					System.out.println("Opção 2 selecionada: Lista de livros registrados\n");
+					List<Livro> livros = livroRepository.findAll();
+					if (livros.isEmpty()) {
+						System.out.println("Nenhum livro registrado.");
+					} else {
+						livros.forEach(System.out::println); // Imprime a lista de livros
+					}
 					break;
 
 				case 3:
 					System.out.println("Opção 3 selecionada: Lista de autores registrados");
+					List<Autor> autores = autorRepository.findAll();
+					if (autores.isEmpty()) {
+						System.out.println("Nenhum autor registrado.");
+					} else {
+						for (Autor autor : autores) { // Itera explicitamente para forçar o carregamento
+							System.out.println(autor);
+						}
+					}
 					break;
 
 				case 4:
@@ -124,6 +140,14 @@ public class LiterAluraApplication implements CommandLineRunner {
 
 				case 5:
 					System.out.println("Opção 5 selecionada: Lista de livros registrados por idioma");
+					System.out.print("Digite o idioma: EX. [pt] ou [en]... ");
+					String idioma = scanner.nextLine();
+					List<Livro> livrosPorIdioma = livroRepository.findByLanguage(idioma);
+					if (livrosPorIdioma.isEmpty()){
+						System.out.println("Nenhum livro registrado nesse idioma");
+					} else {
+						livrosPorIdioma.forEach(System.out::println);
+					}
 					break;
 
 				case 0:

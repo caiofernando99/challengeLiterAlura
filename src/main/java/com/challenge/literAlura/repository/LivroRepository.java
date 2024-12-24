@@ -1,11 +1,11 @@
 package com.challenge.literAlura.repository;
 
-import com.challenge.literAlura.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
+import com.challenge.literAlura.model.Livro;
 import java.util.List;
 
+@Repository
 public interface LivroRepository extends JpaRepository<Livro, Long> {
-//    List<Livro> findByLanguages(String language);
-//    List<Livro> findByTitleContaining(String title);
+    List<Livro> findByLanguage(String language);
 }

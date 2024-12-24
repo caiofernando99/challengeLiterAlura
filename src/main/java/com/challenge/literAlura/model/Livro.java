@@ -64,8 +64,9 @@ public class Livro {
     @Override
     public String toString() {
         return
-                "Titulo: " + title + '\'' +
-                "Autor: " + author +
-                "Numero de downloads: " + downloadCount;
+                "title: " + title + "\n" +
+                "id: " + id + "\n" +
+                "downloadCount: " + downloadCount + "\n" +
+                "language: " + language + "\n";
     }
 }

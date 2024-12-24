@@ -14,7 +14,7 @@ public class Autor {
 
     private String nome;
 
-    @OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Livro> livros = new ArrayList<>();
 
     private int dataNascimento;
@@ -23,8 +23,10 @@ public class Autor {
     @Override
     public String toString() {
         return
-                "Autor: '" + nome + '\'' +
-                ", livros=" + livros;
+                "Nome: " + nome + "\n" +
+                "id: " + id + "\n" +
+                "Data de Nascimento: " + dataNascimento + "\n" +
+                "Data da Morte: " + dataMorte;
     }
 
     public Long getId() {
