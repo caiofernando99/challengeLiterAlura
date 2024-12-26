@@ -90,9 +90,9 @@ public class LiterAluraApplication implements CommandLineRunner {
 								}
 
 								autorRepository.save(author);
-								System.out.println("Autor Salvo: " + author); // Log para verificar o autor salvo
+								System.out.println("Autor Salvo: " + author);
 							} else {
-								System.out.println("Autor Encontrado: " + author); // Log para verificar o autor encontrado
+								System.out.println("Autor Encontrado: " + author);
 							}
 
 							Livro livroSalvar = new Livro();
@@ -100,10 +100,10 @@ public class LiterAluraApplication implements CommandLineRunner {
 							livroSalvar.setDownloadCount(livroAPI.downloads());
 							livroSalvar.setLanguage(String.valueOf(livroAPI.language()));
 
-							livroSalvar.setAuthor(author); // ASSOCIA o autor ao livro
+							livroSalvar.setAuthor(author);
 
-							livroRepository.save(livroSalvar); // Salva o LIVRO DEPOIS
-							System.out.println("Livro Salvo: " + livroSalvar); // Log para verificar o livro salvo
+							livroRepository.save(livroSalvar);
+							System.out.println("Livro Salvo: " + livroSalvar);
 						}
 
 					} else {
@@ -118,7 +118,7 @@ public class LiterAluraApplication implements CommandLineRunner {
 					if (livros.isEmpty()) {
 						System.out.println("Nenhum livro registrado.");
 					} else {
-						livros.forEach(System.out::println); // Imprime a lista de livros
+						livros.forEach(System.out::println);
 					}
 					break;
 
@@ -128,14 +128,27 @@ public class LiterAluraApplication implements CommandLineRunner {
 					if (autores.isEmpty()) {
 						System.out.println("Nenhum autor registrado.");
 					} else {
-						for (Autor autor : autores) { // Itera explicitamente para forçar o carregamento
+						for (Autor autor : autores) {
 							System.out.println(autor);
 						}
 					}
 					break;
 
 				case 4:
-					System.out.println("Opção 4 selecionada: Lista de autores vivos em determinado ano");
+					System.out.println("Opção 4 selecionada: Lista de autores vivos em determinado ano\n");
+					try {
+						System.out.print("Digite o ano: ");
+						int ano = Integer.parseInt(scanner.nextLine());
+						List<Autor> autoresVivos = autorRepository.findByDataNascimentoLessThanEqualAndDataMorteGreaterThanEqualComLivros(ano);
+
+						if (autoresVivos.isEmpty()) {
+							System.out.println("Nenhum autor vivo nesse ano.");
+						} else {
+							autoresVivos.forEach(System.out::println);
+						}
+					} catch (NumberFormatException e) {
+						System.out.println("Ano inválido. Digite um número inteiro.");
+					}
 					break;
 
 				case 5:
